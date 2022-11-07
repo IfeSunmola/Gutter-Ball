@@ -1,0 +1,5 @@
+Catalogue of Variable names and purposes
+snake_case for naming convention
+
+main()
+    main function
