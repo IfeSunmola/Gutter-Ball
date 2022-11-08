@@ -1,6 +1,6 @@
 # Add your name before your list of files you want git to ignore
 # Ife
-Gutter-Ball.code-workspace
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
