@@ -5,3 +5,7 @@ main()
     """
     This is the main function
     """
+
+To create a virtual environment: python3 -m venv .env
+To activate: source .env/bin/activate
+    (there should be a change in the terminal)
