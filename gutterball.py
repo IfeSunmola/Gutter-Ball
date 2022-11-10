@@ -1,22 +1,25 @@
-import pygame 
+import pygame
 from sys import exit
 
-pygame.init() 
-screen = pygame.display.set_mode((400,400))
-pygame.display.set_caption("GutterBall")
-# windowicon = pygame.image.load("windowicon.png")
-# pygame.display.set_icon(windowicon)
-pygame.key.set_repeat(1,4)
-clock = pygame.time.Clock()
+pygame.init()
+screen = pygame.display.set_mode((400, 400))
 
-game_active = True
+pygame.display.set_caption("GutterBall")
+
+window_icon = pygame.image.load("graphics/window_icon.png")
+pygame.display.set_icon(window_icon)
+
+pygame.key.set_repeat(1, 4)
+clock = pygame.time.Clock()
 
 background_surf = pygame.image.load("graphics/background.png").convert()
 
 player_surf = pygame.image.load('graphics/player.png').convert_alpha()
-player_rect = player_surf.get_rect(center = (50,200))
+player_rect = player_surf.get_rect(center=(50, 200))
 
-while True: 
+game_active = True
+
+while game_active:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -30,6 +33,8 @@ while True:
                 player_rect.y += 1
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 player_rect.x += 1
+
+        # checking boundaries
         if player_rect.left <= 0:
             player_rect.left = 0
         if player_rect.right >= 400:
@@ -39,13 +44,12 @@ while True:
         if player_rect.bottom >= 350:
             player_rect.bottom = 350
 
-
     if game_active:
-        screen.blit(background_surf,(0,0))
-        pygame.draw.rect(screen, "Black",pygame.Rect(0,0,400,50))
-        pygame.draw.rect(screen, "Black",pygame.Rect(0,350,400,50))
-        
-        screen.blit(player_surf,player_rect)
+        screen.blit(background_surf, (0, 0))
+        pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))
+        pygame.draw.rect(screen, "Black", pygame.Rect(0, 350, 400, 50))
+
+        screen.blit(player_surf, player_rect)
 
     pygame.display.update()
     clock.tick(60)
