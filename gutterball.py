@@ -13,7 +13,7 @@ game_active = True
 
 background_surf = pygame.image.load("graphics/background.png").convert()
 
-player_surf = pygame.image.load('graphics/playericon.png').convert_alpha()
+player_surf = pygame.image.load('graphics/player.png').convert_alpha()
 player_rect = player_surf.get_rect(center = (50,200))
 
 while True: 
