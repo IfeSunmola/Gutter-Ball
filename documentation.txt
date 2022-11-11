@@ -46,8 +46,15 @@ ______ _ _
 \_|   |_|_|\___||___/                                          
 graphics/
         background.png : background image for all levels
-        playericon.png : character image for all levels
-
+        player.png : character image for all levels
+        menu.png : start menu image
+        pin.png : generic pin image, no letter
+        pin1(S).png : pin image with letter "S"
+        pin2(H).png : pin image with letter "H"
+        pin3(I).png : pin image with letter "I"
+        pin4(F).png : pin image with letter "F"
+        pin5(T)).png : pin image with letter "T"
+        window_icon.png : icon that appears on window and dock
 
 
 
