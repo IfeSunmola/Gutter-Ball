@@ -1,0 +1,20 @@
+Starting from main(),
+	a player_rect is created. A pin_rect is NOT created here because the pin surface changes with each level. The player surface remains the same.
+	State variables to keep track of the game
+	Enter game loop:
+		show the menu screen (Press space to start)
+		in the event loop:
+			- we check if the space key was pressed. If it was, set start game to true. To do any action relating to the game itself, we must first
+			check if start game is true.
+			- we also handle movements
+	check_boundary() to make sure player_rect stays in the game window
+
+	if game_active and start_game:
+		show the background
+		check if the current level > number of levels.
+			if it's greater, that means user has passed level 6.
+			**we probably need more things here**
+		else
+			initialize the levels screen by calling level_init()
+				This function creates the pin_rect based on the current level and returns it so we can check for collisions
+				This function also handles displaying level num, and any information that should be displayed in the black spaces
