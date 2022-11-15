@@ -1,89 +1,108 @@
 import pygame
 from sys import exit
 
+# Constants
+PLAYER_SPEED = 1
+WINDOW_SIZE = 400
+NUM_LEVELS = 6
+
+# Game initialization
 pygame.init()
-
-#Window Set-Up
-
-screen = pygame.display.set_mode((400, 400)) 
+screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 
 pygame.display.set_caption("GutterBall")
 
-window_icon = pygame.image.load("graphics/window_icon.png")
-pygame.display.set_icon(window_icon)
+WINDOW_ICON = pygame.image.load("graphics/window_icon.png")
+pygame.display.set_icon(WINDOW_ICON)
 
 pygame.key.set_repeat(1, 4)
 clock = pygame.time.Clock()
 
-#Variables
+# More constants, these depend on pygame being initialized first, so they can't be with the constants above
+TEXT_FONT = pygame.font.Font('fonts/digital-dream/DIGITALDREAM.ttf', 30)  # font to use for all the text
+MENU_SURF = pygame.image.load("graphics/menu.png").convert()
+BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert()
+PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
 
-menu_surf = pygame.image.load("graphics/menu.png").convert()
 
-background_surf = pygame.image.load("graphics/background.png").convert()
+def level_init(level_num, player_rect):
+    pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))  # black space above the 'play ground'
 
-player_surf = pygame.image.load('graphics/player.png').convert_alpha()
-player_rect = player_surf.get_rect(center=(50, 200))
+    level_surf = TEXT_FONT.render(f"LEVEL {level_num}", False, 'green')  # For the level text
+    screen.blit(level_surf, (120, 0))  # Show "LEVEL {level_num}"
 
-#Main_menu
+    pygame.draw.rect(screen, "Black", pygame.Rect(0, 350, 400, 50))  # black space below the 'play ground'
+
+    pin_image = f"graphics/pin{level_num}.png"
+    pin_surf = pygame.image.load(pin_image).convert_alpha()
+    pin_rect = pin_surf.get_rect(bottomright=(400, 200))
+
+    screen.blit(PLAYER_SURF, player_rect)
+    screen.blit(pin_surf, pin_rect)
+
+    return pin_rect
+
+
+def check_boundary(player_rect):
+    if player_rect.left <= 0:
+        player_rect.left = 0
+    elif player_rect.right >= WINDOW_SIZE:
+        player_rect.right = WINDOW_SIZE
+    elif player_rect.top <= 50:  # TODO: Change to be relative to WINDOW_SIZE
+        player_rect.top = 50
+    elif player_rect.bottom >= 350:
+        player_rect.bottom = 350
+
 
 def main():
-    while True:
-        for event in pygame.event.get():
-            screen.blit(menu_surf,(0,0))
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+    player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    levels()
-        pygame.display.update()
-        clock.tick(60)
-
-#Game Loop
-
-def levels():
+    # State variables -> to keep track of what actions to perform in the game
     game_active = True
+    start_game = False
+    level_num = 1
 
     while game_active:
-
+        screen.blit(MENU_SURF, (0, 0))
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                start_game = True
+
+            # we only want to track the buttons and move the player when start_game is true
+            if start_game and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
-                    player_rect.y -= 1
+                    player_rect.y -= PLAYER_SPEED
                 if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    player_rect.x -= 1
+                    player_rect.x -= PLAYER_SPEED
                 if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    player_rect.y += 1
+                    player_rect.y += PLAYER_SPEED
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    player_rect.x += 1
+                    player_rect.x += PLAYER_SPEED
 
-            # checking boundaries
-            if player_rect.left <= 0:
-                player_rect.left = 0
-            if player_rect.right >= 400:
-                player_rect.right = 400
-            if player_rect.top <= 50:
-                player_rect.top = 50
-            if player_rect.bottom >= 350:
-                player_rect.bottom = 350
+        check_boundary(player_rect)
 
-        if game_active:
-            screen.blit(background_surf, (0, 0))
-            pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))
-            pygame.draw.rect(screen, "Black", pygame.Rect(0, 350, 400, 50))
-            screen.blit(player_surf, player_rect)
+        if game_active and start_game:  # we only want to show the levels if start_game is true
+            screen.blit(BACKGROUND_SURF, (0, 0))
+
+            if level_num > NUM_LEVELS:  # No levels left, exit
+                print("Game Finished")  # Do what happens when the game finishes
+                game_active = False
+
+            else:  # still some levels left. Anything level related should be done in this `else`
+                pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
+
+                if player_rect.colliderect(pin_rect):  # player has hit the pin
+                    player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
+                    print("Strike!")  # Just so I can see something in the console, delete later
+                    level_num += 1  # move to next level
 
         pygame.display.update()
         clock.tick(60)
 
-    pygame.quit()
 
-# this runs the game.
-
-main()
+if __name__ == '__main__':
+    main()
