@@ -63,7 +63,7 @@ def main():
     # State variables -> to keep track of what actions to perform in the game
     game_active = True
     start_game = False
-    level_num = 1
+    level_num = 1 
 
     while game_active:
         screen.blit(MENU_SURF, (0, 0))
@@ -113,7 +113,10 @@ def main():
         clock.tick(60)
 
 #Background Sound
-mixer.music.load('background.mp3') #Background music that will be continuous 
+# mixer.music.load('background.mp3') #Background music that will be continuous 
+# mixer.music.play(-1)
+
+mixer.music.load('background_2.mp3') #Background music that will be continuous 
 mixer.music.play(-1)
 
 if __name__ == '__main__':
