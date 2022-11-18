@@ -3,7 +3,6 @@ from sys import exit
 
 from pygame import mixer
 
-
 # Constants
 PLAYER_SPEED = 1
 WINDOW_HEIGHT = 400
@@ -75,7 +74,7 @@ def main():
     # State variables -> to keep track of what actions to perform in the game
     game_active = True
     start_game = False
-    level_num = 1 
+    level_num = 1
 
     while game_active:
         screen.blit(MENU_SURF, (0, 0))
@@ -85,7 +84,7 @@ def main():
                 exit()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                start_sound = mixer.Sound('start.wav') #Sound when the user starts their game
+                start_sound = mixer.Sound('start.wav')  # Sound when the user starts their game
                 start_sound.play()
                 start_game = True
 
@@ -115,9 +114,9 @@ def main():
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
                     print("Strike!")  # Just so I can see something in the console, delete later
-                    score_sound = mixer.Sound('score.mp3') #Sound when the user hits the pin
+                    score_sound = mixer.Sound('score.mp3')  # Sound when the user hits the pin
                     score_sound.play()
-                    start_sound = mixer.Sound('start.wav') #Sound when the user moves to the next level
+                    start_sound = mixer.Sound('start.wav')  # Sound when the user moves to the next level
                     start_sound.play()
                     level_num += 1  # move to next level
 
@@ -126,11 +125,12 @@ def main():
         pygame.display.update()
         clock.tick(60)
 
-#Background Sound
+
+# Background Sound
 # mixer.music.load('background.mp3') #Background music that will be continuous 
 # mixer.music.play(-1)
 
-mixer.music.load('background_2.mp3') #Background music that will be continuous 
+mixer.music.load('background_2.mp3')  # Background music that will be continuous
 mixer.music.play(-1)
 
 if __name__ == '__main__':
