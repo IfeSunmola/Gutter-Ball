@@ -1,14 +1,17 @@
 import pygame
 from sys import exit
 
+from pygame import mixer
+
 # Constants
 PLAYER_SPEED = 1
-WINDOW_SIZE = 400
+WINDOW_HEIGHT = 400
+WINDOW_LENGTH = 400
 NUM_LEVELS = 6
 
 # Game initialization
 pygame.init()
-screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+screen = pygame.display.set_mode((WINDOW_LENGTH, WINDOW_HEIGHT))
 
 pygame.display.set_caption("GutterBall")
 
@@ -35,7 +38,7 @@ def level_init(level_num, player_rect):
 
     pin_image = f"graphics/pin{level_num}.png"
     pin_surf = pygame.image.load(pin_image).convert_alpha()
-    pin_rect = pin_surf.get_rect(bottomright=(400, 200))
+    pin_rect = pin_surf.get_rect(bottomright=(400, 220))
 
     screen.blit(PLAYER_SURF, player_rect)
     screen.blit(pin_surf, pin_rect)
@@ -46,12 +49,23 @@ def level_init(level_num, player_rect):
 def check_boundary(player_rect):
     if player_rect.left <= 0:
         player_rect.left = 0
-    elif player_rect.right >= WINDOW_SIZE:
-        player_rect.right = WINDOW_SIZE
-    elif player_rect.top <= 50:  # TODO: Change to be relative to WINDOW_SIZE
+    elif player_rect.right >= WINDOW_LENGTH:
+        player_rect.right = WINDOW_LENGTH
+    elif player_rect.top <= WINDOW_HEIGHT - 350:  # TODO: Change to be relative to WINDOW_SIZE
         player_rect.top = 50
-    elif player_rect.bottom >= 350:
-        player_rect.bottom = 350
+    elif player_rect.bottom >= (WINDOW_HEIGHT - 50):
+        player_rect.bottom = (WINDOW_HEIGHT - 50)
+
+
+def draw_bottom_pins(level_num):
+    # the x position moves by 32px, starting from 350, so we can just keep subtracting
+    pos_x, pos_y = 350, 350
+    i = 2
+    while i <= level_num:
+        temp_surf = pygame.image.load(f'graphics/pin{i - 1}.png')
+        screen.blit(temp_surf, (pos_x, pos_y))
+        pos_x -= 32
+        i += 1
 
 
 def main():
@@ -70,18 +84,20 @@ def main():
                 exit()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                start_sound = mixer.Sound('start.wav')  # Sound when the user starts their game
+                start_sound.play()
                 start_game = True
 
             # we only want to track the buttons and move the player when start_game is true
             if start_game and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
-                    player_rect.y -= PLAYER_SPEED
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    player_rect.x -= PLAYER_SPEED
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                     player_rect.y += PLAYER_SPEED
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                     player_rect.x += PLAYER_SPEED
+                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                    player_rect.y -= PLAYER_SPEED
+                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    player_rect.x -= PLAYER_SPEED
 
         check_boundary(player_rect)
 
@@ -98,11 +114,24 @@ def main():
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
                     print("Strike!")  # Just so I can see something in the console, delete later
+                    score_sound = mixer.Sound('score.mp3')  # Sound when the user hits the pin
+                    score_sound.play()
+                    start_sound = mixer.Sound('start.wav')  # Sound when the user moves to the next level
+                    start_sound.play()
                     level_num += 1  # move to next level
+
+                draw_bottom_pins(level_num)
 
         pygame.display.update()
         clock.tick(60)
 
+
+# Background Sound
+# mixer.music.load('background.mp3') #Background music that will be continuous 
+# mixer.music.play(-1)
+
+mixer.music.load('background_2.mp3')  # Background music that will be continuous
+mixer.music.play(-1)
 
 if __name__ == '__main__':
     main()
