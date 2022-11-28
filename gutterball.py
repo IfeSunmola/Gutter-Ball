@@ -106,7 +106,7 @@ def main():
                 exit()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                start_sound = mixer.Sound('start.wav')  # Sound when the user starts their game
+                start_sound = mixer.Sound('audio/start.wav')  # Sound when the user starts their game
                 start_sound.play()
                 start_game = True
 
@@ -134,20 +134,27 @@ def main():
                 pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
                 obstacles_rect = new_level(level_num)
 
-                # checking if the player collided with any of the obstacles
-                # ISRA: Show failure screen when collision occurs
-                for rect in obstacles_rect:
-                    if player_rect.colliderect(rect):
-                        print("FAILURE")
-
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
                     print("Strike!")  # Just so I can see something in the console, delete later
-                    score_sound = mixer.Sound('score.mp3')  # Sound when the user hits the pin
+                    score_sound = mixer.Sound('audio/score.mp3')  # Sound when the user hits the pin
                     score_sound.play()
-                    start_sound = mixer.Sound('start.wav')  # Sound when the user moves to the next level
+                    start_sound = mixer.Sound('audio/start.wav')  # Sound when the user moves to the next level
                     start_sound.play()
                     level_num += 1  # move to next level
+
+                else:
+                # checking if the player collided with any of the obstacles and if holding shift
+                    collisions = True
+                    for rect in obstacles_rect: 
+                        pressed = pygame.key.get_pressed()
+                        if pressed[pygame.K_LSHIFT]:
+                            collisions = False
+                        if pressed[pygame.K_RSHIFT]:
+                            collisions = False
+                        if collisions == True:
+                            if player_rect.colliderect(rect):
+                                player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
                 draw_bottom_pins(level_num)
 
@@ -156,7 +163,7 @@ def main():
 
 
 # Background Sound
-mixer.music.load('background_2.mp3')  # Background music that will be continuous
+mixer.music.load('audio/background_2.mp3')  # Background music that will be continuous
 mixer.music.play(-1)
 
 if __name__ == '__main__':
