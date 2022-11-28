@@ -1,7 +1,9 @@
 # __GutterBall__
 
 1 / clone repository to local computer
+
 2 / open gutterball.py
+
 3 / run *python gutterball.py*
 
 ### WARNING:
