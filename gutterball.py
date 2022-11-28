@@ -156,9 +156,6 @@ def main():
 
 
 # Background Sound
-# mixer.music.load('background.mp3') #Background music that will be continuous 
-# mixer.music.play(-1)
-
 mixer.music.load('background_2.mp3')  # Background music that will be continuous
 mixer.music.play(-1)
 
