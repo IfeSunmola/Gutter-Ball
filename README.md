@@ -1,14 +1,20 @@
 # __GutterBall__
 
-1 / clone repository to local computer
 
-2 / open gutterball.py
+ONE // install pygame to the local machine 
+> python3 -m pip install -U pygame --user
 
-3 / run *python gutterball.py*
+TWO // clone repository to local computer
+> https://github.com/IfeSunmola/Gutter-Ball.git
+
+THREE // open gutterball.py
+
+FOUR // run *python gutterball.py*
 
 ### WARNING:
 >There are bug(s) present in this application. 
-When attempting to complete the game, please consider that a hint may be required for success.
+
+> When attempting to complete the game, please consider that a hint may be required for success.
 
 ###### NOTICE:
 Good luck, have fun.
