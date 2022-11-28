@@ -12,11 +12,11 @@
 ## WARNING:
 There are bug(s) present in this application. 
 
-When moving, please consider that the player may be required to move in the opposite direction
+When moving, please consider that the player may be required to move in the opposite direction.
 
-When attempting to complete the game, please consider that a hint may be required for success
+When attempting to complete the game, please consider that a hint may be required for success.
 
-When completing levels, please consider why would someone leave *random* letters on the collectibles?
+When completing levels, please consider why someone would leave *random* letters on the collectibles.
 
 ###### NOTICE:
 Good luck, have fun.
