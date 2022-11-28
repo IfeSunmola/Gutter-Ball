@@ -49,11 +49,11 @@ def level_init(level_num, player_rect):
 def check_boundary(player_rect):
     if player_rect.left <= 0:
         player_rect.left = 0
-    elif player_rect.right >= WINDOW_LENGTH:
+    if player_rect.right >= WINDOW_LENGTH:
         player_rect.right = WINDOW_LENGTH
-    elif player_rect.top <= WINDOW_HEIGHT - 350:  # TODO: Change to be relative to WINDOW_SIZE
+    if player_rect.top <= WINDOW_HEIGHT - 350:  # TODO: Change to be relative to WINDOW_SIZE
         player_rect.top = 50
-    elif player_rect.bottom >= (WINDOW_HEIGHT - 50):
+    if player_rect.bottom >= (WINDOW_HEIGHT - 50):
         player_rect.bottom = (WINDOW_HEIGHT - 50)
 
 
@@ -87,6 +87,7 @@ def new_level(level_num):
         rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(350, 100, 50, 50)))
     if level_num == 6:
         rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 200, 300)))
+    return rects
 
 
 def main():
@@ -131,7 +132,13 @@ def main():
 
             else:  # still some levels left. Anything level related should be done in this `else`
                 pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
-                new_level(level_num)
+                obstacles_rect = new_level(level_num)
+
+                # checking if the player collided with any of the obstacles
+                # ISRA: Show failure screen when collision occurs
+                for rect in obstacles_rect:
+                    if player_rect.colliderect(rect):
+                        print("FAILURE")
 
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
