@@ -68,6 +68,27 @@ def draw_bottom_pins(level_num):
         i += 1
 
 
+def new_level(level_num):
+    rects = []
+    if level_num == 2:
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(175, 100, 50, 200)))
+    if level_num == 3:
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 150, 50, 250)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 50, 50, 200)))
+    if level_num == 4:
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 100, 50, 200)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 50, 50, 100)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 250, 50, 150)))
+    if level_num == 5:
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 50, 150)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 300, 50, 100)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 100, 50, 300)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(0, 100, 100, 50)))
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(350, 100, 50, 50)))
+    if level_num == 6:
+        rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 200, 300)))
+
+
 def main():
     player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
@@ -110,6 +131,7 @@ def main():
 
             else:  # still some levels left. Anything level related should be done in this `else`
                 pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
+                new_level(level_num)
 
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
