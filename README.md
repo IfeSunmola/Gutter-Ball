@@ -24,3 +24,6 @@ Windows User:
 ###### NOTICE:
 Good luck, have fun.
 And most of all, gg <3
+
+Thanks for playing,
+Ife, Jordan, Kinza & Isra
