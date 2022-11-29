@@ -29,13 +29,16 @@ PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
 WINNER_SURF = pygame.image.load("graphics/winning.png").convert()
 
 
-def level_init(level_num, player_rect):
+def level_init(level_num, death_counter, player_rect):
     pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))  # black space above the 'play ground'
 
     level_surf = TEXT_FONT.render(f"LEVEL {level_num}", False, 'green')  # For the level text
     screen.blit(level_surf, (120, 0))  # Show "LEVEL {level_num}"
 
     pygame.draw.rect(screen, "Black", pygame.Rect(0, 350, 400, 50))  # black space below the 'play ground'
+
+    deaths_surf = TEXT_FONT.render(f"DEATHS:{death_counter}", False, 'red')  # For the deaths text
+    screen.blit(deaths_surf, (0, 365))  # Show death count
 
     pin_image = f"graphics/pin{level_num}.png"
     pin_surf = pygame.image.load(pin_image).convert_alpha()
@@ -75,7 +78,7 @@ def add_obstacles(level_num):
     if level_num == 2:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(175, 100, 50, 200)))
     if level_num == 3:
-        obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 150, 50, 250)))
+        obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 150, 50, 200)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 50, 50, 200)))
     if level_num == 4:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 100, 50, 200)))
@@ -83,7 +86,7 @@ def add_obstacles(level_num):
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 250, 50, 150)))
     if level_num == 5:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 50, 150)))
-        obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 300, 50, 100)))
+        obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 250, 50, 100)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 100, 50, 300)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(0, 100, 100, 50)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(350, 100, 50, 50)))
@@ -100,6 +103,7 @@ def main():
     game_active = True
     start_game = False
     level_num = 1
+    death_counter = 0
     detect_collisions = True  # We want to detect collisions by default.
     event = None  # The for loop (or event in pygame ...) will store all the events. Like this, we can check for events outside the loop
 
@@ -140,10 +144,11 @@ def main():
                 screen.blit(WINNER_SURF, (-30, -30))
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     level_num = 1
+                    death_counter = 0
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
             else:  # still some levels left. Anything level related should be done in this `else`
-                pin_rect, obstacles = level_init(level_num, player_rect)  # show the screen for level_num
+                pin_rect, obstacles = level_init(level_num, death_counter, player_rect)  # show the screen for level_num
 
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
@@ -159,6 +164,7 @@ def main():
                     if detect_collisions:
                         for obstacle in obstacles:
                             if player_rect.colliderect(obstacle):  # Collision, reset the player position
+                                death_counter += 1
                                 player_rect = PLAYER_SURF.get_rect(center=(50, 200))
                                 screen.blit(PLAYER_SURF, player_rect)
                 draw_bottom_pins(level_num)
