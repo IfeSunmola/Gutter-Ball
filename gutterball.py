@@ -28,6 +28,7 @@ BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert()
 PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
 WINNER_SURF = pygame.image.load("graphics/winning.png").convert()
 
+
 def level_init(level_num, player_rect):
     pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))  # black space above the 'play ground'
 
@@ -97,6 +98,7 @@ def main():
     game_active = True
     start_game = False
     level_num = 1
+    detect_collisions = True  # We want to detect collisions by default.
 
     while game_active:
         screen.blit(MENU_SURF, (0, 0))
@@ -112,14 +114,19 @@ def main():
 
             # we only want to track the buttons and move the player when start_game is true
             if start_game and event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w or event.key == pygame.K_UP:
+                pressed = pygame.key.get_pressed()
+                if pressed[pygame.K_w] or pressed[pygame.K_UP]:
                     player_rect.y += PLAYER_SPEED
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                if pressed[pygame.K_a] or pressed[pygame.K_LEFT]:
                     player_rect.x += PLAYER_SPEED
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                if pressed[pygame.K_s] or pressed[pygame.K_DOWN]:
                     player_rect.y -= PLAYER_SPEED
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                if pressed[pygame.K_d] or pressed[pygame.K_RIGHT]:
                     player_rect.x -= PLAYER_SPEED
+                if pressed[pygame.K_LSHIFT] or pressed[pygame.K_RSHIFT]:
+                    detect_collisions = False
+                else:
+                    detect_collisions = True  # To make sure that collision detection should occur if the player is not holding down shift
 
         check_boundary(player_rect)
 
@@ -128,11 +135,10 @@ def main():
 
             if level_num > NUM_LEVELS:  # No levels left, exit
                 # Do what happens when the game finishes
-                screen.blit(WINNER_SURF, (-30,-30))
+                screen.blit(WINNER_SURF, (-30, -30))
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     level_num = 1
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))
-                    start = False
 
             else:  # still some levels left. Anything level related should be done in this `else`
                 pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
@@ -148,18 +154,12 @@ def main():
                     level_num += 1  # move to next level
 
                 else:
-                # checking if the player collided with any of the obstacles and if holding shift
-                    collisions = True
-                    for rect in obstacles_rect: 
-                        pressed = pygame.key.get_pressed()
-                        if pressed[pygame.K_LSHIFT]:
-                            collisions = False
-                        if pressed[pygame.K_RSHIFT]:
-                            collisions = False
-                        if collisions == True:
-                            if player_rect.colliderect(rect):
+                    # checking if the player collided with any of the obstacles and if holding shift
+                    if detect_collisions:
+                        for rect in obstacles_rect:
+                            if player_rect.colliderect(rect):  # Collison, reset the player position
                                 player_rect = PLAYER_SURF.get_rect(center=(50, 200))
-
+                                screen.blit(PLAYER_SURF, player_rect)
                 draw_bottom_pins(level_num)
 
         pygame.display.update()
