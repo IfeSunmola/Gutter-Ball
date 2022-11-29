@@ -26,7 +26,7 @@ TEXT_FONT = pygame.font.Font('fonts/digital-dream/DIGITALDREAM.ttf', 30)  # font
 MENU_SURF = pygame.image.load("graphics/menu.png").convert()
 BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert()
 PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
-
+WINNER_SURF = pygame.image.load("graphics/winning.png").convert()
 
 def level_init(level_num, player_rect):
     pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))  # black space above the 'play ground'
@@ -127,8 +127,12 @@ def main():
             screen.blit(BACKGROUND_SURF, (0, 0))
 
             if level_num > NUM_LEVELS:  # No levels left, exit
-                print("Game Finished")  # Do what happens when the game finishes
-                game_active = False
+                # Do what happens when the game finishes
+                screen.blit(WINNER_SURF, (-30,-30))
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    level_num = 1
+                    player_rect = PLAYER_SURF.get_rect(center=(50, 200))
+                    start = False
 
             else:  # still some levels left. Anything level related should be done in this `else`
                 pin_rect = level_init(level_num, player_rect)  # show the screen for level_num
