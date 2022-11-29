@@ -29,6 +29,15 @@ PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
 WINNER_SURF = pygame.image.load("graphics/winning.png").convert_alpha()
 LOSER_SURF = pygame.image.load("graphics/losing.png").convert_alpha()
 
+PIN_SURFS = {
+    "1": pygame.image.load("graphics/pin1.png").convert_alpha(),
+    "2": pygame.image.load("graphics/pin2.png").convert_alpha(),
+    "3": pygame.image.load("graphics/pin3.png").convert_alpha(),
+    "4": pygame.image.load("graphics/pin4.png").convert_alpha(),
+    "5": pygame.image.load("graphics/pin5.png").convert_alpha(),
+    "6": pygame.image.load("graphics/pin6.png").convert_alpha()
+}
+
 
 def level_init(level_num, death_counter, player_rect):
     pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 50))  # black space above the 'play ground'
@@ -41,8 +50,7 @@ def level_init(level_num, death_counter, player_rect):
     deaths_surf = TEXT_FONT.render(f"DEATHS:{death_counter}", False, 'red')  # For the deaths text
     screen.blit(deaths_surf, (0, 365))  # Show death count
 
-    pin_image = f"graphics/pin{level_num}.png"
-    pin_surf = pygame.image.load(pin_image).convert_alpha()
+    pin_surf = PIN_SURFS[f"{level_num}"]
     pin_rect = pin_surf.get_rect(bottomright=(400, 220))
 
     screen.blit(PLAYER_SURF, player_rect)
@@ -78,20 +86,20 @@ def add_obstacles(level_num):
     obstacles_rects = []
     if level_num == 2:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(175, 100, 50, 200)))
-    if level_num == 3:
+    elif level_num == 3:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 150, 50, 200)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 50, 50, 200)))
-    if level_num == 4:
+    elif level_num == 4:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 100, 50, 200)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 50, 50, 100)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 250, 50, 150)))
-    if level_num == 5:
+    elif level_num == 5:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 50, 150)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 250, 50, 100)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(250, 100, 50, 300)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(0, 100, 100, 50)))
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(350, 100, 50, 50)))
-    if level_num == 6:
+    elif level_num == 6:
         obstacles_rects.append(pygame.draw.rect(screen, "Black", pygame.Rect(100, 50, 200, 300)))
 
     return obstacles_rects
@@ -144,8 +152,7 @@ def main():
             if level_num > NUM_LEVELS:  # No levels left, do what happens when the game finishes
                 screen.blit(WINNER_SURF, (-30, -30))
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    level_num = 1
-                    death_counter = 0
+                    level_num, death_counter = 1, 0
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
             else:  # still some levels left. Anything level related should be done in this `else`
@@ -153,7 +160,6 @@ def main():
 
                 if player_rect.colliderect(pin_rect):  # player has hit the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
-                    print("Strike!")  # Just so I can see something in the console, delete later
                     score_sound = mixer.Sound('audio/score.mp3')  # Sound when the user hits the pin
                     score_sound.play()
                     start_sound = mixer.Sound('audio/start.wav')  # Sound when the user moves to the next level
@@ -173,8 +179,7 @@ def main():
                     screen.blit(LOSER_SURF, (-30, -30))
                     # pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 400))  # black space above the 'play ground'
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                        level_num = 1
-                        death_counter = 0
+                        level_num, death_counter = 1, 0
                         player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
         pygame.display.update()
