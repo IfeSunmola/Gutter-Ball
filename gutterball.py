@@ -23,10 +23,11 @@ clock = pygame.time.Clock()
 
 # More constants, these depend on pygame being initialized first, so they can't be with the constants above
 TEXT_FONT = pygame.font.Font('fonts/digital-dream/DIGITALDREAM.ttf', 30)  # font to use for all the text
-MENU_SURF = pygame.image.load("graphics/menu.png").convert()
-BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert()
+MENU_SURF = pygame.image.load("graphics/menu.png").convert_alpha()
+BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert_alpha()
 PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
-WINNER_SURF = pygame.image.load("graphics/winning.png").convert()
+WINNER_SURF = pygame.image.load("graphics/winning.png").convert_alpha()
+LOSER_SURF = pygame.image.load("graphics/losing.png").convert_alpha()
 
 
 def level_init(level_num, death_counter, player_rect):
@@ -105,7 +106,7 @@ def main():
     level_num = 1
     death_counter = 0
     detect_collisions = True  # We want to detect collisions by default.
-    event = None  # The for loop (or event in pygame ...) will store all the events. Like this, we can check for events outside the loop
+    event = None  # The for loop (for event in pygame ...) will store all the events. Like this, we can check for events outside the loop
 
     while game_active:
         screen.blit(MENU_SURF, (0, 0))
@@ -159,15 +160,22 @@ def main():
                     start_sound.play()
                     level_num += 1  # move to next level
 
-                else:
-                    # checking if the player collided with any of the obstacles and if holding shift
-                    if detect_collisions:
-                        for obstacle in obstacles:
-                            if player_rect.colliderect(obstacle):  # Collision, reset the player position
-                                death_counter += 1
-                                player_rect = PLAYER_SURF.get_rect(center=(50, 200))
-                                screen.blit(PLAYER_SURF, player_rect)
+                if detect_collisions:  # RECALL: detect_collisions is set to true if any of the 'Shift' buttons are pressed while moving
+                    for obstacle in obstacles:  # checking if the player collided with any of the obstacles
+                        if player_rect.colliderect(obstacle):  # Collision, reset the player position
+                            death_counter += 1
+                            player_rect = PLAYER_SURF.get_rect(center=(50, 200))
+                            screen.blit(PLAYER_SURF, player_rect)
+
                 draw_bottom_pins(level_num)
+
+                if death_counter > 99:  # if counter goes past 100, the last '0' will overlap with the pins
+                    screen.blit(LOSER_SURF, (-30, -30))
+                    # pygame.draw.rect(screen, "Black", pygame.Rect(0, 0, 400, 400))  # black space above the 'play ground'
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                        level_num = 1
+                        death_counter = 0
+                        player_rect = PLAYER_SURF.get_rect(center=(50, 200))
 
         pygame.display.update()
         clock.tick(60)
