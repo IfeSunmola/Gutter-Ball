@@ -101,6 +101,7 @@ def main():
     start_game = False
     level_num = 1
     detect_collisions = True  # We want to detect collisions by default.
+    event = None  # The for loop (or event in pygame ...) will store all the events. Like this, we can check for events outside the loop
 
     while game_active:
         screen.blit(MENU_SURF, (0, 0))
@@ -135,8 +136,7 @@ def main():
         if game_active and start_game:  # we only want to show the levels if start_game is true
             screen.blit(BACKGROUND_SURF, (0, 0))
 
-            if level_num > NUM_LEVELS:  # No levels left, exit
-                # Do what happens when the game finishes
+            if level_num > NUM_LEVELS:  # No levels left, do what happens when the game finishes
                 screen.blit(WINNER_SURF, (-30, -30))
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     level_num = 1
