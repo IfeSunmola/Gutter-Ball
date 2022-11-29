@@ -24,6 +24,7 @@ clock = pygame.time.Clock()
 
 # More constants, these depend on pygame being initialized first, so they can't be with the constants above
 TEXT_FONT = pygame.font.Font('fonts/digital-dream/DIGITALDREAM.ttf', 30)  # font to use for all the text
+# Graphics
 MENU_SURF = pygame.image.load("graphics/menu.png").convert_alpha()
 BACKGROUND_SURF = pygame.image.load("graphics/background.png").convert_alpha()
 PLAYER_SURF = pygame.image.load('graphics/player.png').convert_alpha()
@@ -38,6 +39,10 @@ PIN_SURFS = {
     "5": pygame.image.load("graphics/pin5.png").convert_alpha(),
     "6": pygame.image.load("graphics/pin6.png").convert_alpha()
 }
+# Audio
+SCORE_SOUND = mixer.Sound('audio/score.mp3')  # Sound when the user hits the pin
+START_SOUND = mixer.Sound('audio/start.wav')  # Sound when the user moves to the next level
+BACKGROUND_SOUND = mixer.Sound("audio/background.mp3")  # Continuous sound that plays in the background
 
 
 def add_obstacles(level_num):
@@ -162,8 +167,7 @@ def main():
                 exit()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:  # User hit the space button to start the game
-                start_sound = mixer.Sound('audio/start.wav')  # Sound when the user starts their game
-                start_sound.play()
+                START_SOUND.play()  # Sound when the user starts their game
                 start_game = True
 
             # we only want to track the buttons and move the player when start_game is true
@@ -198,11 +202,9 @@ def main():
                 pin_rect, obstacles = level_init(level_num, death_counter, player_rect)
 
                 if player_rect.colliderect(pin_rect):  # player has hit the pin, move to next level
+                    SCORE_SOUND.play()  # Play sound for when player hits the pin
                     player_rect = PLAYER_SURF.get_rect(center=(50, 200))  # reset the player's position
-                    score_sound = mixer.Sound('audio/score.mp3')  # Sound when the user hits the pin
-                    score_sound.play()
-                    start_sound = mixer.Sound('audio/start.wav')  # Sound when the user moves to the next level
-                    start_sound.play()
+                    START_SOUND.play()  # Play Sound for when the user moves to the next level
                     level_num += 1  # move to next level
 
                 if detect_collisions:  # RECALL: detect_collisions is set to true if any of the 'shift' buttons are pressed while moving
@@ -225,9 +227,7 @@ def main():
         clock.tick(60)
 
 
-# Background Sound
-mixer.music.load('audio/background_2.mp3')  # Background music that will be continuous
-mixer.music.play(-1)
+BACKGROUND_SOUND.play(-1)  # Plays continuous music in the background
 
 if __name__ == '__main__':
     main()
