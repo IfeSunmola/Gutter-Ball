@@ -42,6 +42,7 @@ PIN_SURFS = {
 # Audio
 SCORE_SOUND = mixer.Sound('audio/score.mp3')  # Sound when the user hits the pin
 START_SOUND = mixer.Sound('audio/start.wav')  # Sound when the user moves to the next level
+BRUH_SOUND = mixer.Sound('audio/bruh.mp3')  # When the user hits an obstacle
 BACKGROUND_SOUND = mixer.Sound("audio/background.mp3")  # Continuous sound that plays in the background
 
 
@@ -210,6 +211,7 @@ def main():
                 if detect_collisions:  # RECALL: detect_collisions is set to true if any of the 'shift' buttons are pressed while moving
                     for obstacle in obstacles:  # checking if the player collided with any of the obstacles
                         if player_rect.colliderect(obstacle):  # Collision, reset the player position
+                            BRUH_SOUND.play()
                             death_counter += 1
                             player_rect = PLAYER_SURF.get_rect(center=(50, 200))
                             screen.blit(PLAYER_SURF, player_rect)
