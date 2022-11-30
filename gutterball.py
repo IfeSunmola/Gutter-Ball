@@ -138,15 +138,27 @@ def draw_bottom_pins(level_num):
     ----
     :param level_num: current level, used to determine which pins to draw
     """
-
-    # the x position moves by 32px, starting from 350, so we can just keep subtracting
-    pos_x, pos_y = 350, 350
-    i = 2
-    while i <= level_num:
-        temp_surf = pygame.image.load(f'graphics/pin{i - 1}.png')
-        screen.blit(temp_surf, (pos_x, pos_y))
-        pos_x -= 32
-        i += 1
+    pos_y = 350
+    if level_num == 2:  # prints the appropriate pins for each level.
+        screen.blit(PIN_SURFS[f"1"], (350, pos_y))
+    if level_num == 3:
+        screen.blit(PIN_SURFS[f"1"], (318, pos_y))
+        screen.blit(PIN_SURFS[f"2"], (350, pos_y))
+    if level_num == 4:
+        screen.blit(PIN_SURFS[f"1"], (286, pos_y))
+        screen.blit(PIN_SURFS[f"2"], (318, pos_y))
+        screen.blit(PIN_SURFS[f"3"], (350, pos_y))
+    if level_num == 5:
+        screen.blit(PIN_SURFS[f"1"], (254, pos_y))
+        screen.blit(PIN_SURFS[f"2"], (286, pos_y))
+        screen.blit(PIN_SURFS[f"3"], (318, pos_y))
+        screen.blit(PIN_SURFS[f"4"], (350, pos_y))
+    if level_num == 6:
+        screen.blit(PIN_SURFS[f"1"], (222, pos_y))
+        screen.blit(PIN_SURFS[f"2"], (254, pos_y))
+        screen.blit(PIN_SURFS[f"3"], (286, pos_y))
+        screen.blit(PIN_SURFS[f"4"], (318, pos_y))
+        screen.blit(PIN_SURFS[f"5"], (350, pos_y))
 
 
 def main():
