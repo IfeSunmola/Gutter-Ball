@@ -1,29 +1,24 @@
 # __GutterBall__
 
 
-#### 1 // install pygame to the local machine 
-Mac Users:
+#### 1. Install pygame to the local machine 
+Mac/Linux Users:
 > python3 -m pip install -U pygame --user
 
 Windows User:
 > py -m pip install -U pygame --user
 
-#### 2 // clone repository to local computer
+#### 2. Clone the repository to local computer with `git clone` or a git GUI client
 > https://github.com/IfeSunmola/Gutter-Ball.git
 
-#### 3 // open gutterball.py in an IDE of choice or proceed to 4
+#### 3. Run the game from your IDE or by `python3 gutterball.py` for unix systems or `python gutterball.py` for Windows systems
 
-#### 4 // run 
-> python gutterball.py
+### IMPORTANT:
+>There are 'bug(s)' present within this application. 
 
-### WARNING:
->There are bug(s) present within this application. 
+> When attempting to complete the game (specifically level 6), a hint may be required for success.
 
-> When attempting to complete the game, please consider that a hint may be required for success.
-
-###### NOTICE:
 Good luck, have fun.
 And most of all, gg <3
-
 
 Ife, Jordan, Kinza & Isra
